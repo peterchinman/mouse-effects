@@ -17,6 +17,9 @@ function ShapeSelect({buttonText, shape, whichShapeSelected, setWhichShapeSelect
 }
 
 function MouseMove() {
+
+  // Type declarations (Question: where should these go? Separate file?)
+
   type PossibleShapeTypes = "rect" | "ellipse";
 
   interface Coordinates {
@@ -27,29 +30,45 @@ function MouseMove() {
   interface Shape {
     shapeType: PossibleShapeTypes;
   }
+
   interface NewShape extends Shape {
     start: Coordinates;
     end: Coordinates;
   }
+
   interface Rect extends Shape {
     x: number;
     y: number;
     width: number;
     height : number;
   }
+
   interface Ellipse extends Shape {
     cx: number;
     cy: number;
     rx: number;
     ry: number;
   }
+
   type ShapeAttribute = Rect | Ellipse;
 
+  // Signals, Stores
+
   const [whichShapeSelected, setWhichShapeSelected] = createSignal<PossibleShapeTypes>("rect");
+
   const [newShape, setNewShape] = createSignal<NewShape>(null);
+
+  /**
+   * TODO: Replace this with a store! That way we can update individual properties of individual elements
+   * */ 
   const [shapes, setShapes] = createSignal<ShapeAttribute[]>([]);
+
   const [pos, setPos] = createSignal<Coordinates>({ x: 0, y: 0 });
   
+
+  // TODO: this is sloppy magic number accounting for header displacement.
+  // A better solution is... to `.getClientRect()` ??
+  // Is it possible for the Drawing Window to shift? Different sized headers at different widths? 
   const headerHeight = 48;
 
   function handleMouseDown(event){
@@ -67,13 +86,37 @@ function MouseMove() {
     })
 
     if (newShape()){
+
       const endX = event.clientX;
       const endY = event.clientY - headerHeight;
 
-      setNewShape({
-        ...newShape(),
-        end: {x: endX, y: endY},
-      });
+      // take longest side while holding shift
+      if (event.shiftKey){
+        let longestDistance = 0;
+
+        // if x-axis longer
+        if(Math.abs(newShape().start.x - endX) > Math.abs(newShape().start.y - endY)){
+          longestDistance = newShape().start.x - endX;
+        }
+        else {
+          longestDistance = newShape().start.y - endY;
+        }
+
+        setNewShape({
+          ...newShape(),
+          end: {x: newShape().start.x - longestDistance, y: newShape().start.y - longestDistance},
+        });
+
+      }
+
+      else {
+        setNewShape({
+          ...newShape(),
+          end: {x: endX, y: endY},
+        });
+      }
+
+      
     }
   }
 
