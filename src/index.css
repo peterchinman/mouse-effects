@@ -13,5 +13,5 @@ body {
 }
 
 button.active {
-   background-color: gray;
+   background-color: hsl(0 0 70);
 }

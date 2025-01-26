@@ -2,17 +2,19 @@ import type { Component } from "solid-js";
 import { createEffect, createSignal, For, Show, Switch, Match } from "solid-js";
 
 
-function Button({buttonText, shape, whichShapeSelected, setWhichShapeSelected}){
+function ShapeSelect({buttonText, shape, whichShapeSelected, setWhichShapeSelected}){
   return (
     <button
-      class={whichShapeSelected() === shape ? 'active' : ''}
+      class={
+        `${whichShapeSelected() === shape ? 'active' : ''}
+        px-2
+        `}
       onClick={() => setWhichShapeSelected(shape)}
     >
       {buttonText}
     </button>
   );
 }
-
 
 function MouseMove() {
   type PossibleShapeTypes = "rect" | "ellipse";
@@ -114,18 +116,18 @@ function MouseMove() {
     <header class="flex gap-8 items-center px-8 bg-gray-200 z-2 min-h-[48px]">
       {/* Display current mouse position */}
       <div class="min-w-[10vw]">{pos().x} x {pos().y}</div>
-      <Button
+      <ShapeSelect
         buttonText="Rectangle"
         shape="rect"
         whichShapeSelected={whichShapeSelected}
         setWhichShapeSelected={setWhichShapeSelected}
-      ></Button>
-      <Button
+      ></ShapeSelect>
+      <ShapeSelect
         buttonText="Ellipse"
         shape="ellipse"
         whichShapeSelected={whichShapeSelected}
         setWhichShapeSelected={setWhichShapeSelected}
-      ></Button>
+      ></ShapeSelect>
     </header>
     <div
       class="w-full h-[calc(100vh-48px)] relative cursor-crosshair bg-gray-100"
