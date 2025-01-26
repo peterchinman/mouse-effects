@@ -115,7 +115,7 @@ function MouseMove() {
     <>
     <header class="flex gap-8 items-center px-8 bg-gray-200 z-2 min-h-[48px]">
       {/* Display current mouse position */}
-      <div class="min-w-[10vw]">{pos().x} x {pos().y}</div>
+      <div class="min-w-[10ch]">{pos().x} x {pos().y}</div>
       <ShapeSelect
         buttonText="Rectangle"
         shape="rect"
