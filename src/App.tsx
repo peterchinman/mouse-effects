@@ -94,17 +94,21 @@ function MouseMove() {
       if (event.shiftKey){
         let longestDistance = 0;
 
-        // if x-axis longer
         if(Math.abs(newShape().start.x - endX) > Math.abs(newShape().start.y - endY)){
-          longestDistance = newShape().start.x - endX;
+          longestDistance = Math.abs(newShape().start.x - endX);
         }
         else {
-          longestDistance = newShape().start.y - endY;
+          longestDistance = Math.abs(newShape().start.y - endY);
         }
+
+        // check if we've moved to the right ? 
+        const shiftX = newShape().start.x < endX? newShape().start.x + longestDistance : newShape().start.x - longestDistance;
+        // check if we've moved down ? 
+        const shiftY =  newShape().start.y < endY? newShape().start.y + longestDistance : newShape().start.y - longestDistance;
 
         setNewShape({
           ...newShape(),
-          end: {x: newShape().start.x - longestDistance, y: newShape().start.y - longestDistance},
+          end: {x: shiftX, y: shiftY},
         });
 
       }
